@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Patient Details</title><link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="topbar"><div><span class="logo small">+</span><strong>Hospital Management System</strong></div><div><span class="role patient-role">PATIENT</span><a class="logout" href="/logout">Logout</a></div></header>
+<main class="container patient-container">
+    <section class="page-heading"><div><h1>My Patient Details</h1><p>Welcome, <strong th:text="${patient.username}"></strong>. Your hospital record is shown below.</p></div></section>
+    <section class="details-grid">
+        <div class="detail-card"><span>Username</span><strong th:text="${patient.username}"></strong></div>
+        <div class="detail-card"><span>Date of Birth</span><strong th:text="${patient.dob != null ? #temporals.format(patient.dob, 'dd/MM/yyyy') : '-'}"></strong></div>
+        <div class="detail-card"><span>Mobile Number</span><strong th:text="${patient.mobileNumber}"></strong></div>
+        <div class="detail-card"><span>Address</span><strong th:text="${patient.address}"></strong></div>
+        <div class="detail-card"><span>Paid Amount</span><strong th:text="${'₹ ' + patient.paidAmount}"></strong></div>
+        <div class="detail-card"><span>Total Amount</span><strong th:text="${'₹ ' + patient.totalAmount}"></strong></div>
+        <div class="detail-card balance-card"><span>Balance</span><strong th:text="${'₹ ' + patient.balance}"></strong></div>
+    </section>
+</main>
+</body>
+</html>

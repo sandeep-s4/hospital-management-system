@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-page">
+<div class="login-shell home-shell">
+    <div class="brand-panel">
+        <div class="logo">+</div>
+        <h1>Hospital Management System</h1>
+        <p>Secure patient records, billing information and hospital administration in one place.</p>
+        <div class="feature-list">
+            <span>✓ Patient records</span>
+            <span>✓ Billing information</span>
+            <span>✓ Secure access</span>
+        </div>
+    </div>
+    <div class="login-panel portal-panel">
+        <h2>Welcome</h2>
+        <p class="muted">Choose how you want to sign in.</p>
+
+        <a class="portal-card" href="/admin/login">
+            <span class="portal-icon">A</span>
+            <span><strong>Admin Login</strong><small>Manage patient records and billing</small></span>
+            <b>→</b>
+        </a>
+
+        <a class="portal-card" href="/patient/login">
+            <span class="portal-icon patient-icon">P</span>
+            <span><strong>Patient Login</strong><small>View your personal hospital details</small></span>
+            <b>→</b>
+        </a>
+
+        <p class="hint">Admin default credentials: <b>admin</b> / <b>admin123</b></p>
+    </div>
+</div>
+</body>
+</html>

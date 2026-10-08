@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="topbar"><div><span class="logo small">+</span><strong>Hospital Management System</strong></div><div><span class="role">ADMIN</span><a class="logout" href="/logout">Logout</a></div></header>
+<main class="container">
+    <section class="page-heading"><div><h1>Patient Management</h1><p>Add, edit, delete and view patient records.</p></div></section>
+
+    <div class="alert success" th:if="${param.saved}">Patient saved successfully.</div>
+    <div class="alert success" th:if="${param.deleted}">Patient deleted successfully.</div>
+
+    <section class="card">
+        <div class="card-title"><h2 th:text="${patient.id == null ? 'Add Patient' : 'Edit Patient'}"></h2><span class="required">* Required</span></div>
+        <form th:action="@{/admin/patients/save}" th:object="${patient}" method="post" class="patient-form">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-grid">
+                <label>Username *<input th:field="*{username}" required placeholder="Patient username"><span class="field-error" th:if="${fieldErrors != null and fieldErrors['username'] != null}" th:text="${fieldErrors['username']}"></span></label>
+                <label>Password <small th:if="${patient.id != null}">(leave blank to keep current password)</small>
+                    <span class="password-field">
+                        <input id="patientPassword" type="password" th:field="*{password}" th:required="${patient.id == null}" placeholder="Patient password" autocomplete="new-password">
+                        <button type="button" class="password-toggle" aria-label="Show password" onclick="togglePassword('patientPassword', this)">
+                            <svg class="eye-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.25 12s3.75-6 9.75-6 9.75 6 9.75 6-3.75 6-9.75 6-9.75-6-9.75-6Z"></path><circle cx="12" cy="12" r="2.75"></circle></svg>
+                        </button>
+                    </span>
+                    <span class="field-error" th:if="${fieldErrors != null and fieldErrors['password'] != null}" th:text="${fieldErrors['password']}"></span>
+                </label>
+                <label>Date of Birth *
+                    <input type="date" id="dob" name="dob" th:value="${patient.dob != null ? #temporals.format(patient.dob, 'yyyy-MM-dd') : ''}" required>
+                    <span class="field-error" th:if="${fieldErrors != null and fieldErrors['dob'] != null}" th:text="${fieldErrors['dob']}"></span>
+                </label>
+                <label>Mobile Number *<input th:field="*{mobileNumber}" required maxlength="10" placeholder="10-digit mobile"><span class="field-error" th:if="${fieldErrors != null and fieldErrors['mobileNumber'] != null}" th:text="${fieldErrors['mobileNumber']}"></span></label>
+                <label class="full">Address *<textarea th:field="*{address}" required rows="3" placeholder="Patient address"></textarea><span class="field-error" th:if="${fieldErrors != null and fieldErrors['address'] != null}" th:text="${fieldErrors['address']}"></span></label>
+                <label>Paid Amount *<input type="number" min="0" step="0.01" th:field="*{paidAmount}" required placeholder="0.00"><span class="field-error" th:if="${fieldErrors != null and fieldErrors['paidAmount'] != null}" th:text="${fieldErrors['paidAmount']}"></span></label>
+                <label>Total Amount *<input type="number" min="0" step="0.01" th:field="*{totalAmount}" required placeholder="0.00"><span class="field-error" th:if="${fieldErrors != null and fieldErrors['totalAmount'] != null}" th:text="${fieldErrors['totalAmount']}"></span></label>
+                <label>Balance<input type="text" th:value="${patient.balance}" readonly></label>
+            </div>
+            <div class="form-actions"><a class="secondary-btn" href="/admin/dashboard">Clear</a><button class="primary-btn" type="submit">Submit</button><a class="view-btn" href="#patients">View Saved Patients</a></div>
+        </form>
+    </section>
+
+    <section id="patients" class="card table-card">
+        <div class="card-title"><h2>Saved Patients</h2><span th:text="${#lists.size(patients) + ' patient(s)'}"></span></div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Username</th><th>DOB</th><th>Mobile</th><th>Address</th><th>Paid</th><th>Total</th><th>Balance</th><th>Actions</th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${patients}">
+                    <td><strong th:text="${p.username}"></strong></td><td th:text="${p.dob != null ? #temporals.format(p.dob, 'dd/MM/yyyy') : '-'}"></td><td th:text="${p.mobileNumber}"></td><td th:text="${p.address}"></td>
+                    <td th:text="${'₹ ' + p.paidAmount}"></td><td th:text="${'₹ ' + p.totalAmount}"></td><td th:text="${'₹ ' + p.balance}"></td>
+                    <td class="actions"><a class="edit-btn" th:href="@{'/admin/patients/edit/' + ${p.id}}">Edit</a><form th:action="@{'/admin/patients/delete/' + ${p.id}}" method="post" onsubmit="return confirm('Delete this patient?')"><button class="delete-btn" type="submit">Delete</button></form></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(patients)}"><td colspan="8" class="empty">No patient records found.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script>
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        button.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        button.classList.toggle('visible', isHidden);
+    }
+</script>
+</body>
+</html>

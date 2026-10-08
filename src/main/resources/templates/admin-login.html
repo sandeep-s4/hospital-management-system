@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Hospital Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-page">
+<div class="login-shell">
+    <div class="brand-panel">
+        <div class="logo">+</div>
+        <h1>Hospital Management System</h1>
+        <p>Admin portal for managing patient records and billing.</p>
+        <div class="feature-list">
+            <span>✓ Create patient records</span>
+            <span>✓ Edit and delete records</span>
+            <span>✓ Manage billing information</span>
+        </div>
+    </div>
+
+    <div class="login-panel">
+        <a class="back-link" href="/">← Back</a>
+        <form class="login-form" method="post" action="/admin/login">
+            <h2>Admin Login</h2>
+            <p class="muted">Sign in to manage patient records.</p>
+
+            <label>Username
+                <input name="username" required autocomplete="username" placeholder="Admin username">
+            </label>
+
+            <label>Password
+                <span class="password-field">
+                    <input id="loginPassword" type="password" name="password" required autocomplete="current-password" placeholder="Admin password">
+                    <button type="button" class="password-toggle" aria-label="Show password" onclick="togglePassword('loginPassword', this)">
+                        <svg class="eye-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.25 12s3.75-6 9.75-6 9.75 6 9.75 6-3.75 6-9.75 6-9.75-6-9.75-6Z"></path><circle cx="12" cy="12" r="2.75"></circle></svg>
+                    </button>
+                </span>
+            </label>
+
+            <label>CAPTCHA
+                <div class="captcha-row">
+                    <span class="captcha" th:text="${captcha}"></span>
+                    <button type="button" class="refresh" onclick="window.location.reload()">↻</button>
+                </div>
+                <input name="captcha" required placeholder="Enter CAPTCHA" autocomplete="off">
+            </label>
+
+            <div class="error" th:if="${error}" th:text="${error}"></div>
+            <button class="primary-btn" type="submit">Submit</button>
+            <p class="hint">Default admin: <b>admin</b> / <b>admin123</b></p>
+        </form>
+    </div>
+</div>
+<script>
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        button.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        button.classList.toggle('visible', isHidden);
+    }
+</script>
+</body>
+</html>
